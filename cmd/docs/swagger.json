@@ -1,0 +1,112 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "一个简单的go web入门项目",
+        "title": "mark-v1 api文档",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "mark",
+            "email": "leis17@163.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/users/userId/{userId}": {
+            "get": {
+                "description": "根据用户id，获取用户详情接口",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "用户详情接口",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{username}": {
+            "get": {
+                "description": "根据用户名称，获取用户详情接口",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "用户详情接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户姓名",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Users": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "地址",
+                    "type": "string"
+                },
+                "age": {
+                    "description": "年龄",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号码",
+                    "type": "string"
+                },
+                "userName": {
+                    "description": "用户名称",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

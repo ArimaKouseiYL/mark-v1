@@ -22,3 +22,18 @@ func (UserService UserService) GetUserByName(username string) models.Users {
 
 	return user
 }
+
+func (UserService UserService) GetUserById(id int) models.Users {
+
+	var user models.Users
+
+	sqlStr := "select user_name,password,age,id,address,phone from users where id=?"
+
+	error := db.Db.QueryRow(sqlStr, id).Scan(&user.UserName, &user.Password, &user.Age, &user.Id, &user.Address, &user.Phone)
+
+	if error != nil {
+
+	}
+
+	return user
+}

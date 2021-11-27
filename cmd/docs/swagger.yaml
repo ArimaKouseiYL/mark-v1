@@ -1,0 +1,76 @@
+basePath: /api/v1
+definitions:
+  models.Users:
+    properties:
+      address:
+        description: 地址
+        type: string
+      age:
+        description: 年龄
+        type: integer
+      id:
+        description: 用户id
+        type: integer
+      password:
+        description: 用户密码
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      userName:
+        description: 用户名称
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: leis17@163.com
+    name: mark
+  description: 一个简单的go web入门项目
+  termsOfService: http://swagger.io/terms/
+  title: mark-v1 api文档
+  version: "1.0"
+paths:
+  /users/{username}:
+    get:
+      consumes:
+      - multipart/form-data
+      description: 根据用户名称，获取用户详情接口
+      parameters:
+      - description: 用户姓名
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Users'
+      summary: 用户详情接口
+      tags:
+      - 用户相关接口
+  /users/userId/{userId}:
+    get:
+      consumes:
+      - multipart/form-data
+      description: 根据用户id，获取用户详情接口
+      parameters:
+      - description: 用户id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Users'
+      summary: 用户详情接口
+      tags:
+      - 用户相关接口
+swagger: "2.0"
