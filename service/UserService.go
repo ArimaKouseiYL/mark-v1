@@ -8,6 +8,15 @@ import (
 type UserService struct {
 }
 
+func (UserService UserService) Registry(user *models.Users) error {
+	sqlStr := "insert into users(id,user_name,password,age,address,phone) values (?,?,?,?,?,?)"
+	_, err := db.Db.Exec(sqlStr, user.Id, user.UserName, user.Password, user.Age, user.Address, user.Phone)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (UserService UserService) GetUserByName(username string) models.Users {
 
 	var user models.Users

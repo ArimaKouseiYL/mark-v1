@@ -2,14 +2,50 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"mark-v1/common/resp"
 	"mark-v1/models"
 	"mark-v1/models/Vo"
+	"mark-v1/pkg/snowflake"
 	"mark-v1/service"
 	"strconv"
 )
 
-func Registry(user Vo.UserRegistryVo) {
+// Registry 用户注册
+// @Summary 用户注册接口
+// @Description 用户注册
+// @Tags 用户相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param object body Vo.UserRegistryVo true "用户Vo"
+// @Success 200 {object}
+// @Router /users/registry [post]
+func Registry(c *gin.Context) {
 
+	userRegistryVo := new(Vo.UserRegistryVo)
+	if err := c.ShouldBind(userRegistryVo); err != nil {
+		resp.ResponseErrorWithMsg(c, resp.CodeInvalidParam, err.Error())
+		return
+	}
+	id := snowflake.GetSnowFlakeId()
+	user := &models.Users{
+		Id:       id,
+		UserName: userRegistryVo.UserName,
+		Password: userRegistryVo.Password,
+		Address:  userRegistryVo.Address,
+		Phone:    userRegistryVo.Phone,
+		Age:      userRegistryVo.Age,
+	}
+	err := registry(user)
+	if err != nil {
+		resp.ResponseError(c, resp.CodeInvalidParam)
+		return
+	}
+	resp.ResponseSuccess(c, nil)
+}
+
+func registry(user *models.Users) error {
+	userService := new(service.UserService)
+	return userService.Registry(user)
 }
 
 func getUserByName(username string) models.Users {

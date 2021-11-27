@@ -27,13 +27,14 @@ func main() {
 
 	//url := gs.URL("http://localhost:8080/swagger/doc.json")
 
-	// 执行swagger swag init --parseDependency --parseInternal
+	// 执行swagger ,  swag init --parseDependency --parseInternal
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/users/:username", controller.GetUserByNameHandle)
 		v1.GET("/users/userId/:userId", controller.GetUserByIdHandle)
+		v1.POST("/users/registry", controller.Registry)
 	}
 
 	r.Run(":8080")

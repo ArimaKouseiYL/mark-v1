@@ -27,6 +27,40 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/users/registry": {
+            "post": {
+                "description": "用户注册",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "用户注册接口",
+                "parameters": [
+                    {
+                        "description": "用户Vo",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Vo.UserRegistryVo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    }
+                }
+            }
+        },
         "/users/userId/{userId}": {
             "get": {
                 "description": "根据用户id，获取用户详情接口",
@@ -93,6 +127,44 @@ var doc = `{
         }
     },
     "definitions": {
+        "Vo.UserRegistryVo": {
+            "type": "object",
+            "required": [
+                "password",
+                "rePassword",
+                "userName"
+            ],
+            "properties": {
+                "address": {
+                    "description": "地址",
+                    "type": "string"
+                },
+                "age": {
+                    "description": "年龄",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号码",
+                    "type": "string"
+                },
+                "rePassword": {
+                    "description": "确认密码",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "id",
+                    "type": "integer"
+                },
+                "userName": {
+                    "description": "名称",
+                    "type": "string"
+                }
+            }
+        },
         "models.Users": {
             "type": "object",
             "properties": {
