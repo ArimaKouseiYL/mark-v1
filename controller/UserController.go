@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"mark-v1/common/auth"
 	"mark-v1/common/resp"
 	"mark-v1/models"
 	"mark-v1/models/Vo"
@@ -10,6 +11,44 @@ import (
 	"strconv"
 )
 
+// Login 用户登录
+// @Summary 用户登录
+// @Description 用户登录
+// @Tags 用户相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param object body Vo.UserLoginVo true "用户登录Vo"
+// @Success 200 {object} resp.Result
+// @Router /users/login [post]
+func Login(c *gin.Context) {
+	var user Vo.UserLoginVo
+	err := c.ShouldBind(&user)
+	if err != nil {
+		resp.ResponseError(c, resp.CodeInvalidParam)
+		return
+	}
+
+	userService := new(service.UserService)
+	userFromDb, err := userService.Login(user.UserName, user.Password)
+	if err != nil {
+		resp.ResponseError(c, resp.CodeInvalidParam)
+		return
+	}
+	if (userFromDb == models.Users{}) {
+		resp.ResponseError(c, resp.CodeUserNotExist)
+		return
+	}
+
+	// 登录成功，生成token
+	token, err := auth.GenToken(userFromDb.Id)
+	if err != nil {
+		resp.ResponseError(c, resp.CodeGenTokenError)
+		return
+	}
+
+	resp.ResponseSuccess(c, token)
+}
+
 // Registry 用户注册
 // @Summary 用户注册接口
 // @Description 用户注册
@@ -17,7 +56,7 @@ import (
 // @Accept application/json
 // @Produce application/json
 // @Param object body Vo.UserRegistryVo true "用户Vo"
-// @Success 200 {object}
+// @Success 200 {object} resp.Result
 // @Router /users/registry [post]
 func Registry(c *gin.Context) {
 
@@ -40,7 +79,7 @@ func Registry(c *gin.Context) {
 		resp.ResponseError(c, resp.CodeInvalidParam)
 		return
 	}
-	resp.ResponseSuccess(c, nil)
+	resp.ResponseSuccessWithCode(c, resp.CodeRegistrySuccess, id)
 }
 
 func registry(user *models.Users) error {
@@ -64,6 +103,7 @@ func getUserById(id int) models.Users {
 // @Tags 用户相关接口
 // @Accept mpfd
 // @Produce octet-stream
+// @Param Authorization header string false "Bearer 用户令牌"
 // @Param username path string true "用户姓名"
 // @Success 200 {object} models.Users
 // @Router /users/{username} [get]
@@ -79,6 +119,7 @@ func GetUserByNameHandle(context *gin.Context) {
 // @Tags 用户相关接口
 // @Accept mpfd
 // @Produce octet-stream
+// @Param Authorization header string false "Bearer 用户令牌"
 // @Param userId path int64 true "用户id"
 // @Success 200 {object} models.Users
 // @Router /users/userId/{userId} [get]

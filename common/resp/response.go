@@ -18,6 +18,8 @@ const (
 	CodeUserNotExist
 	CodeInvalidPassword
 	CodeServerBusy
+	CodeRegistrySuccess
+	CodeGenTokenError
 )
 
 var msgMap = map[int]string{
@@ -27,6 +29,8 @@ var msgMap = map[int]string{
 	CodeUserNotExist:    "用户不存在",
 	CodeInvalidPassword: "密码错误",
 	CodeServerBusy:      "服务繁忙",
+	CodeRegistrySuccess: "用户注册成功",
+	CodeGenTokenError:   "token生成失败",
 }
 
 func getMsg(code int) string {
@@ -57,6 +61,14 @@ func ResponseSuccess(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, &Result{
 		Code: CodeSuccess,
 		Msg:  getMsg(CodeSuccess),
+		Data: data,
+	})
+}
+
+func ResponseSuccessWithCode(c *gin.Context, code int, data interface{}) {
+	c.JSON(http.StatusOK, &Result{
+		Code: code,
+		Msg:  getMsg(code),
 		Data: data,
 	})
 }

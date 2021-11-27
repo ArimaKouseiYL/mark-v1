@@ -1,5 +1,20 @@
 basePath: /api/v1
 definitions:
+  Vo.UserLoginVo:
+    properties:
+      password:
+        description: 密码
+        type: string
+      token:
+        description: token
+        type: string
+      username:
+        description: 名称
+        type: string
+    required:
+    - password
+    - username
+    type: object
   Vo.UserRegistryVo:
     properties:
       address:
@@ -49,6 +64,14 @@ definitions:
         description: 用户名称
         type: string
     type: object
+  resp.Result:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -65,6 +88,10 @@ paths:
       - multipart/form-data
       description: 根据用户名称，获取用户详情接口
       parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
       - description: 用户姓名
         in: path
         name: username
@@ -78,6 +105,28 @@ paths:
           schema:
             $ref: '#/definitions/models.Users'
       summary: 用户详情接口
+      tags:
+      - 用户相关接口
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录
+      parameters:
+      - description: 用户登录Vo
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/Vo.UserLoginVo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.Result'
+      summary: 用户登录
       tags:
       - 用户相关接口
   /users/registry:
@@ -98,7 +147,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Users'
+            $ref: '#/definitions/resp.Result'
       summary: 用户注册接口
       tags:
       - 用户相关接口

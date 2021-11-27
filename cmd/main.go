@@ -5,6 +5,7 @@ import (
 	gs "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "mark-v1/cmd/docs"
+	"mark-v1/common/auth"
 	"mark-v1/common/db"
 	"mark-v1/controller"
 )
@@ -32,9 +33,10 @@ func main() {
 
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/users/:username", controller.GetUserByNameHandle)
-		v1.GET("/users/userId/:userId", controller.GetUserByIdHandle)
+		v1.GET("/users/:username", auth.JWTAuthMiddleware(), controller.GetUserByNameHandle)
+		v1.GET("/users/userId/:userId", auth.JWTAuthMiddleware(), controller.GetUserByIdHandle)
 		v1.POST("/users/registry", controller.Registry)
+		v1.POST("/users/login", controller.Login)
 	}
 
 	r.Run(":8080")

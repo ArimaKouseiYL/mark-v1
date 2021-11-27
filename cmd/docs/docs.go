@@ -27,6 +27,40 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/users/login": {
+            "post": {
+                "description": "用户登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户相关接口"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "用户登录Vo",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Vo.UserLoginVo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Result"
+                        }
+                    }
+                }
+            }
+        },
         "/users/registry": {
             "post": {
                 "description": "用户注册",
@@ -55,7 +89,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Users"
+                            "$ref": "#/definitions/resp.Result"
                         }
                     }
                 }
@@ -109,6 +143,12 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "用户姓名",
                         "name": "username",
                         "in": "path",
@@ -127,6 +167,27 @@ var doc = `{
         }
     },
     "definitions": {
+        "Vo.UserLoginVo": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "token": {
+                    "description": "token",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "名称",
+                    "type": "string"
+                }
+            }
+        },
         "Vo.UserRegistryVo": {
             "type": "object",
             "required": [
@@ -190,6 +251,18 @@ var doc = `{
                 },
                 "userName": {
                     "description": "用户名称",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.Result": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "message": {
                     "type": "string"
                 }
             }

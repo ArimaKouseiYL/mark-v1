@@ -8,6 +8,18 @@ import (
 type UserService struct {
 }
 
+func (UserService UserService) Login(username, password string) (models.Users, error) {
+	sqlStr := "select user_name,password,age,id,address,phone from users where user_name=? and password=?"
+
+	var user models.Users
+
+	err := db.Db.QueryRow(sqlStr, username, password).Scan(&user.UserName, &user.Password, &user.Age, &user.Id, &user.Address, &user.Phone)
+	if err != nil {
+		return user, err
+	}
+	return user, err
+}
+
 func (UserService UserService) Registry(user *models.Users) error {
 	sqlStr := "insert into users(id,user_name,password,age,address,phone) values (?,?,?,?,?,?)"
 	_, err := db.Db.Exec(sqlStr, user.Id, user.UserName, user.Password, user.Age, user.Address, user.Phone)
