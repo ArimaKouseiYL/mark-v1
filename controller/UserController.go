@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"mark-v1/common/auth"
 	"mark-v1/common/resp"
 	"mark-v1/models"
@@ -31,6 +32,7 @@ func Login(c *gin.Context) {
 	userService := new(service.UserService)
 	userFromDb, err := userService.Login(user.UserName, user.Password)
 	if err != nil {
+		zap.L().Error(resp.GetMsg(resp.CodeInvalidParam), zap.Error(err))
 		resp.ResponseError(c, resp.CodeInvalidParam)
 		return
 	}
@@ -76,6 +78,7 @@ func Registry(c *gin.Context) {
 	}
 	err := registry(user)
 	if err != nil {
+		zap.L().Error(resp.GetMsg(resp.CodeInvalidParam), zap.Error(err))
 		resp.ResponseError(c, resp.CodeInvalidParam)
 		return
 	}

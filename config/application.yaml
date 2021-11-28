@@ -1,7 +1,15 @@
-
 db:
   url: localhost
   port: 3306
   username: root
   password: 123456
   database: mark-v1
+
+log:
+  level: "debug"
+  max_size: 1000
+  max_age: 3600
+  max_backups: 5
+  mode: dev
+
+

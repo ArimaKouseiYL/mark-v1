@@ -33,7 +33,7 @@ var msgMap = map[int]string{
 	CodeGenTokenError:   "token生成失败",
 }
 
-func getMsg(code int) string {
+func GetMsg(code int) string {
 	msg, ok := msgMap[code]
 	if !ok {
 		msg = msgMap[CodeServerBusy]
@@ -44,7 +44,7 @@ func getMsg(code int) string {
 func ResponseError(c *gin.Context, code int) {
 	c.JSON(http.StatusOK, &Result{
 		Code: code,
-		Msg:  getMsg(code),
+		Msg:  GetMsg(code),
 		Data: nil,
 	})
 }
@@ -60,7 +60,7 @@ func ResponseErrorWithMsg(c *gin.Context, code int, msg string) {
 func ResponseSuccess(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, &Result{
 		Code: CodeSuccess,
-		Msg:  getMsg(CodeSuccess),
+		Msg:  GetMsg(CodeSuccess),
 		Data: data,
 	})
 }
@@ -68,7 +68,7 @@ func ResponseSuccess(c *gin.Context, data interface{}) {
 func ResponseSuccessWithCode(c *gin.Context, code int, data interface{}) {
 	c.JSON(http.StatusOK, &Result{
 		Code: code,
-		Msg:  getMsg(code),
+		Msg:  GetMsg(code),
 		Data: data,
 	})
 }
